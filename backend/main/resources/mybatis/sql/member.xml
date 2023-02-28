@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mj_crossShot.Mapper.MemberMapper">
+
+	<resultMap type="mj_crossShot.models.Member" id="Member">
+		<id property="memId" column="memId"></id>
+		
+		<result property="pwd" column="pwd" />
+		<result property="username" column="username" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+		<result property="admin" column="admin" />
+
+	</resultMap>
+
+	<select id="findById"  resultMap="Member">
+		<!-- 아아디 중복 확인 -->
+		select memId from member where memId = #{memId}
+	</select>
+
+	<!-- 관리자 여부 -->
+	<select id="adminLogin" resultType="int">
+
+		select admin from member where memId = #{memId}
+	</select>
+
+	<!-- 회원리스트 -->
+	<select id="getMemberList" resultMap="Member">
+		SELECT * FROM member
+
+	</select>
+
+	<!-- 나의정보 단일조회 -->
+	<select id="getMyList" resultMap="Member">
+		SELECT * FROM member where
+		memId = #{memId}
+
+	</select>
+
+	<!-- 로그인 -->
+	<select id="login" resultMap="Member">
+
+		SELECT
+		memId, pwd FROM MEMBER
+		WHERE
+		memId = #{memId}
+
+	</select>
+
+	<!-- 회원 가입 -->
+	<insert id="memberJoin">
+		INSERT INTO member
+		(
+		memId,
+		pwd,
+		username,
+		email,
+		phone,
+		admin
+		)
+		VALUES
+		(
+		#{memId},
+		#{pwd},
+		#{username},
+		#{email},
+		#{phone},
+		#{admin}
+		)
+	</insert>
+
+	<!-- 회원 수정 -->
+	<update id="changeMember">
+		UPDATE member
+		SET pwd=#{pwd}, username=#{username},
+		email=#{email}, phone=#{phone}
+		WHERE memId=#{memId};
+	</update>
+
+	<!-- 회원 탈퇴 CASCADE 설정함 -->
+	<delete id="deleteMember">
+		DELETE FROM mjdb.member
+		WHERE memId=#{memId};
+	</delete>
+
+</mapper>
